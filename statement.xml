@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--The COPYRIGHT file at the top level of this repository contains the full
+copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="res.group" id="group_import_csv">
+            <field name="name">Import CSV</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_import_csv">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_import_csv"/>
+        </record>
+
+        <!-- import.csv.payment.from.sale.start -->
+        <record model="ir.ui.view" id="import_csv_payment_from_sale_start_form_view">
+            <field name="model">import.csv.payment.from.sale.start</field>
+            <field name="type">form</field>
+            <field name="name">import_csv_payment_from_sale_start_form</field>
+        </record>
+
+        <record model="ir.action.wizard" id="act_import_csv_payment_from_sale">
+            <field name="name">Import Statements from CSV File</field>
+            <field name="wiz_name">import.csv.payment.from.sale</field>
+        </record>
+
+        <menuitem
+            parent="sale.menu_sale"
+            action="act_import_csv_payment_from_sale"
+            id="menu_import_csv_payment_from_sale"/>
+        <record model="ir.ui.menu-res.group" id="menu_import_csv_group">
+            <field name="menu" ref="menu_import_csv_payment_from_sale"/>
+            <field name="group" ref="group_import_csv"/>
+        </record>
+
+    </data>
+</tryton>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+copyright notices and license terms. -->
+<tryton>
+    <data>
+
+        <!-- profile.csv -->
+        <record model="ir.ui.view" id="profile_csv_form_view">
+            <field name="model">profile.csv</field>
+            <field name="type">form</field>
+            <field name="name">profile_csv_form</field>
+        </record>
+
+        <record model="ir.action.act_window" id="act_profile_csv">
+            <field name="name">Sale Payment CSV Profiles</field>
+            <field name="res_model">profile.csv</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_profile_csv_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="import_csv.profile_csv_tree_view"/>
+            <field name="act_window" ref="act_profile_csv"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_profile_csv_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="profile_csv_form_view"/>
+            <field name="act_window" ref="act_profile_csv"/>
+        </record>
+        <menuitem
+            name="Sale Payment CSV Profiles"
+            parent="import_csv.main_menu_import_csv"
+            action="act_profile_csv"
+            id="menu_profile_csv"
+            sequence="10"/>
+
+
+        <record model="ir.ui.view" id="profile_csv_log_tree_view">
+            <field name="model">import.csv.log</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="30"/>
+            <field name="name">import_csv_log_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_profile_csv_logs">
+            <field name="name">Import CSV Logs</field>
+            <field name="res_model">import.csv.log</field>
+            <field name="domain">[('origin', '=', ('account.statement',Eval('active_id')))]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_profile_csv_logs_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="profile_csv_log_tree_view"/>
+            <field name="act_window" ref="act_profile_csv_logs"/>
+        </record>
+        <record model="ir.action.keyword" id="act_profile_csv_logs_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">account.statement,-1</field>
+            <field name="action" ref="act_profile_csv_logs"/>
+        </record>
+
+    </data>
+</tryton>
+    
