@@ -10,7 +10,6 @@ __metaclass__ = PoolMeta
 
 class ProfileCSV:
     __name__ = 'profile.csv'
-#     margin = fields.Float('Margin', help='Margin of write-off in percentage')
     journal = fields.Many2One('account.statement.journal',
         'Account Statement Journal')
     sale_domain = fields.Char('Sale Domain Searcher')
