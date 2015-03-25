@@ -3,7 +3,6 @@
 from trytond.model import fields
 from trytond.pool import PoolMeta
 
-
 __all__ = ['ProfileCSV']
 __metaclass__ = PoolMeta
 

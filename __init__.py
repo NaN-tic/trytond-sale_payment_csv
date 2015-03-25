@@ -4,7 +4,6 @@ from trytond.pool import Pool
 from .import_csv import *
 from .statement import *
 
-
 def register():
     Pool.register(
         ProfileCSV,
