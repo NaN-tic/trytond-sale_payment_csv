@@ -95,7 +95,9 @@ class PaymentFromSaleImportCSV(Wizard):
         found_sales = []
         log_values = []
         for row in list(data):
-            log_value = {}
+            log_value = {
+                'date_time': datetime.now(),
+                }
             values = {}
             statement_line_domain = []
 
@@ -146,7 +148,9 @@ class PaymentFromSaleImportCSV(Wizard):
             log_value['comment'] = ('Sale %s found.' % sale.reference)
             log_value['status'] = 'done'
             log_values.append(log_value)
-            log_value = {}
+            log_value = {
+                'date_time': datetime.now(),
+                }
 
             account = (sale.party.account_receivable
                 and sale.party.account_receivable.id
