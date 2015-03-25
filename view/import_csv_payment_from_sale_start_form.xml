@@ -8,6 +8,4 @@ copyright notices and license terms. -->
     <field name="import_file"/>
     <label name="attach"/>
     <field name="attach"/>
-<!--     <label name="confirm"/> -->
-<!--     <field name="confirm"/> -->
 </form>
