@@ -24,7 +24,7 @@ copyright notices and license terms. -->
         </record>
 
         <menuitem
-            parent="sale.menu_sale"
+            parent="account_statement.menu_statements"
             action="act_import_csv_payment_from_sale"
             id="menu_import_csv_payment_from_sale"/>
         <record model="ir.ui.menu-res.group" id="menu_import_csv_group">
