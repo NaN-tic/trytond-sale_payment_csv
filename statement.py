@@ -1,6 +1,7 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 from datetime import datetime
+from decimal import Decimal
 from trytond.model import ModelView, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Button, StateTransition, StateView, Wizard
@@ -51,6 +52,24 @@ class PaymentFromSaleImportCSV(Wizard):
                     '%s account journal. Please configure one.',
                 'not_draft_statement_found': 'There isn\'t any statement in '
                     'draft state. Please open one.',
+                'sale_domain_searcher_error': 'Error in field Sale Domain '
+                    'Searcher.\nError raised: %s',
+                'sale_domain_searcher_help': "Tryton's domain [1] for "
+                    "searching sales which match with statement lines. You "
+                    "can use these variables:\n"
+                    " * values: Dictionary with values mapped on the columns "
+                    "of the csv profile.\n"
+                    " * row: List with the values of the csv file. This "
+                    "variable can not process other values than Char type.\n"
+                    "As a example:\n["
+                    "('reference', '=', row[4]), "
+                    "('total_amount_cache', '>', "
+                        "values['amount'] * Decimal(0.99)), "
+                    "('total_amount_cache', '<', "
+                        "values['amount'] * Decimal(1.01)), "
+                    "('state', 'not in', ['cancel', 'done'])]\n\n"
+                    "[1] http://trytond.readthedocs.org/en/latest/topics/"
+                    "domain.html."
                 })
 
     def transition_import_file(self):
@@ -76,30 +95,6 @@ class PaymentFromSaleImportCSV(Wizard):
         found_sales = []
         log_values = []
         for row in list(data):
-            sale_domain = eval(profile.sale_domain)
-            log_value = {}
-            sales = Sale.search(sale_domain)
-            if not sales:
-                log_value['comment'] = ('Sale %s skipped. Not found.' %
-                    sale_domain)
-                log_value['status'] = 'skipped'
-                log_values.append(log_value)
-                continue
-            elif len(sales) > 1:
-                log_value['comment'] = ('Sale %s skipped. Found more than '
-                    'once: %s.' % (
-                        sale_domain,
-                        ' '.join(s.reference for s in sales)
-                        )
-                    )
-                log_value['status'] = 'skipped'
-                log_values.append(log_value)
-                continue
-            sale, = sales
-            log_value['comment'] = ('Sale %s found.' % sale.reference)
-            log_value['status'] = 'done'
-            log_values.append(log_value)
-
             log_value = {}
             values = {}
             statement_line_domain = []
@@ -123,6 +118,35 @@ class PaymentFromSaleImportCSV(Wizard):
                 log_value['status'] = 'skipped'
                 log_values.append(log_value)
                 continue
+
+            try:
+                sale_domain = eval(profile.sale_domain, globals(), locals())
+            except (NameError, TypeError) as e:
+                self.raise_user_error('sale_domain_searcher_error',
+                    error_args=(e,),
+                    error_description='sale_domain_searcher_help')
+            sales = Sale.search(sale_domain)
+            if not sales:
+                log_value['comment'] = ('Sale %s skipped. Not found.' %
+                    sale_domain)
+                log_value['status'] = 'skipped'
+                log_values.append(log_value)
+                continue
+            elif len(sales) > 1:
+                log_value['comment'] = ('Sale %s skipped. Found more than '
+                    'once: %s.' % (
+                        sale_domain,
+                        ' '.join(s.reference for s in sales)
+                        )
+                    )
+                log_value['status'] = 'skipped'
+                log_values.append(log_value)
+                continue
+            sale, = sales
+            log_value['comment'] = ('Sale %s found.' % sale.reference)
+            log_value['status'] = 'done'
+            log_values.append(log_value)
+            log_value = {}
 
             account = (sale.party.account_receivable
                 and sale.party.account_receivable.id
