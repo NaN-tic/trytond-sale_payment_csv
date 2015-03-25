@@ -1,0 +1,103 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:import.csv.payment.from.sale:"
+msgid "No sales found for this csv file."
+msgstr "No se encontraron ventas en este archivo csv."
+
+msgctxt "error:import.csv.payment.from.sale:"
+msgid ""
+"No statement journal configured for %s account journal. Please configure "
+"one."
+msgstr ""
+"No hay ningún diario de extracto configurado para %s diario contable. Por "
+"favor, configure uno."
+
+msgctxt "error:import.csv.payment.from.sale:"
+msgid ""
+"Please, check that the Statement CSV configuration matches with the format "
+"of the CSV file."
+msgstr ""
+"Por favor, compruebe que la configuración de los extractos CSV coincide con "
+"el formato del archivo CSV."
+
+msgctxt "error:import.csv.payment.from.sale:"
+msgid "There isn't any statement in draft state. Please open one."
+msgstr "No hay ningun extracto en estado borrador. Por favor abra uno."
+
+msgctxt "field:import.csv.payment.from.sale.start,attach:"
+msgid "Attach File"
+msgstr "Adjunta archivo"
+
+msgctxt "field:import.csv.payment.from.sale.start,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:import.csv.payment.from.sale.start,import_file:"
+msgid "Import File"
+msgstr "Importar archivo"
+
+msgctxt "field:import.csv.payment.from.sale.start,profile:"
+msgid "Profile CSV"
+msgstr "Perfil CSV"
+
+msgctxt "field:profile.csv,journal:"
+msgid "Account Statement Journal"
+msgstr "Diario de extracto"
+
+msgctxt "field:profile.csv,sale_domain:"
+msgid "Sale Domain Searcher"
+msgstr "Dominio de búsqueda de ventas"
+
+msgctxt "help:import.csv.payment.from.sale.start,attach:"
+msgid "Attach CSV file after import."
+msgstr "Adjunta archivo CSV tras la importación."
+
+msgctxt "model:import.csv.payment.from.sale.start,name:"
+msgid "Payment From Sale Import CSV Start"
+msgstr "Inicio de importación de pagos desde ventas CSV "
+
+msgctxt "model:ir.action,name:act_import_csv_payment_from_sale"
+msgid "Import Statements from CSV File"
+msgstr "Importar extractos desde archivo CSV"
+
+msgctxt "model:ir.action,name:act_profile_csv"
+msgid "Sale Payment CSV Profiles"
+msgstr "Perfiles de pagos de venta CSV"
+
+msgctxt "model:ir.action,name:act_profile_csv_logs"
+msgid "Import CSV Logs"
+msgstr "Registros de importación CSV"
+
+msgctxt "model:ir.ui.menu,name:menu_import_csv_payment_from_sale"
+msgid "Import Statements from CSV File"
+msgstr "Importar extractos desde archivo CSV"
+
+msgctxt "model:ir.ui.menu,name:menu_profile_csv"
+msgid "Sale Payment CSV Profiles"
+msgstr "Perfiles de pagos de venta CSV"
+
+msgctxt "model:res.group,name:group_import_csv"
+msgid "Import CSV"
+msgstr "Importar CSV"
+
+msgctxt "view:import.csv.log:"
+msgid "Import CSV Logs"
+msgstr "Registros de importación CSV"
+
+msgctxt "view:import.csv.payment.from.sale.start:"
+msgid "Import CSV File"
+msgstr "Importar archivo CSV"
+
+msgctxt "view:profile.csv:"
+msgid "Profile CSV"
+msgstr "Perfil CSV"
+
+msgctxt "wizard_button:import.csv.payment.from.sale,start,end:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "wizard_button:import.csv.payment.from.sale,start,import_file:"
+msgid "Import File"
+msgstr "Importar archivo"
