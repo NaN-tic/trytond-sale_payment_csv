@@ -7,7 +7,7 @@ import os
 import ConfigParser
 
 MODULE = 'sale_payment_csv'
-PREFIX = 'trytonzz'
+PREFIX = 'trytonspain'
 MODULE2PREFIX = {}
 
 
