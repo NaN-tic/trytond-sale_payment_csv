@@ -11,6 +11,8 @@ class ProfileCSV:
     __name__ = 'profile.csv'
     journal = fields.Many2One('account.statement.journal',
         'Account Statement Journal')
+    write_off_journal = fields.Many2One('account.statement.journal',
+        'Write Off Statement Journal')
     sale_domain = fields.Char('Sale Domain Searcher',
         help="Tryton's domain [1] for searching sales which match with "
             "statement lines. You can use these variables:\n"

@@ -27,4 +27,6 @@ copyright notices and license terms. -->
     <field name="sale_domain" colspan="3"/>
     <label name="journal"/>
     <field name="journal"/>
+    <label name="write_off_journal"/>
+    <field name="write_off_journal"/>
 </form>

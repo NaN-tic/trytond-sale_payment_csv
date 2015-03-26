@@ -46,7 +46,6 @@ class PaymentFromSaleImportCSV(Wizard):
         cls._error_messages.update({
                 'csv_format_error': 'Please, check that the Statement CSV '
                     'configuration matches with the format of the CSV file.',
-                'no_sales_found': 'No sales found for this csv file.',
                 'not_statement_journal': 'No statement journal configured for '
                     '%s account journal. Please configure one.',
                 'not_draft_statement_found': 'There isn\'t any statement in '
@@ -91,7 +90,7 @@ class PaymentFromSaleImportCSV(Wizard):
             next(data, None)
 
         vlist = []
-        found_sales = []
+        sales_found = []
         log_values = []
         for row in list(data):
             log_value = {
@@ -144,6 +143,13 @@ class PaymentFromSaleImportCSV(Wizard):
                 log_values.append(log_value)
                 continue
             sale, = sales
+            Sale.workflow_to_end([sale])
+
+            values['write_off'] = Decimal('0.0')
+            if sale.total_amount_cache != values['amount']:
+                values['write_off'] = (sale.total_amount_cache -
+                    values['amount'])
+
             log_value['comment'] = ('Sale %s found.' % sale.reference)
             log_value['status'] = 'done'
             log_values.append(log_value)
@@ -168,33 +174,56 @@ class PaymentFromSaleImportCSV(Wizard):
             log_values.append(log_value)
 
             vlist.append(values)
-            found_sales.append(sale)
+            sales_found.append(sale)
 
-        if found_sales:
-            statements = Statement.search([
-                    ('journal', '=', profile.journal),
+        statements = Statement.search([
+                ('journal', '=', profile.journal),
+                ('state', '=', 'draft'),
+                ], order=[
+                ('date', 'DESC'),
+                ], limit=1)
+        if not statements:
+            self.raise_user_error('not_draft_statement_found')
+        statement, = statements
+
+        for values in vlist:
+            values['statement'] = statement.id
+
+        if any([v['write_off'] for v in vlist]):
+            write_off_statements = Statement.search([
+                    ('journal', '=', profile.write_off_journal),
                     ('state', '=', 'draft'),
                     ], order=[
                     ('date', 'DESC'),
                     ], limit=1)
-            if not statements:
+            if not write_off_statements:
                 self.raise_user_error('not_draft_statement_found')
-            statement, = statements
+            write_off_statement, = write_off_statements
 
+            write_off_vlist = []
             for values in vlist:
-                values['statement'] = statement.id
-            StatementLine.create(vlist)
-            Sale.workflow_to_end(found_sales)
+                if not values['write_off']:
+                    continue
+                write_off_values = {k: v for k, v in values.items()}
+                write_off_values['amount'] = write_off_values.pop('write_off')
+                write_off_values['statement'] = write_off_statement.id
+                write_off_vlist.append(write_off_values)
 
-            if attach:
-                attachment = Attachment(
-                    name=datetime.now().strftime('%y/%m/%d %H:%M:%S'),
-                    type='data',
-                    data=import_file,
-                    resource=str(statement))
-                attachment.save()
-        else:
-            self.raise_user_error('no_sales_found')
+            StatementLine.create(write_off_vlist)
+
+        for values in vlist:
+            values.pop('write_off')
+        StatementLine.create(vlist)
+
+        Sale.workflow_to_end(sales_found)
+
+        if attach:
+            attachment = Attachment(
+                name=datetime.now().strftime('%y/%m/%d %H:%M:%S'),
+                type='data',
+                data=import_file,
+                resource=str(statement))
+            attachment.save()
 
         for log_value in log_values:
             log_value['origin'] = 'account.statement,%s' % statement.id
