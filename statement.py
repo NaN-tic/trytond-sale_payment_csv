@@ -45,10 +45,9 @@ class PaymentFromSaleImportCSVStart(ModelView):
 
     @classmethod
     def default_profile(cls):
-        Profile = Pool().get('profile.csv')
-        profiles = Profile.search([])
+        profiles = cls().on_change_with_profile_domain()
         if len(profiles) == 1:
-            return profiles[0].id
+            return profiles[0]
 
     @classmethod
     def default_attach(cls):
