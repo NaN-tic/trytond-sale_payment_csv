@@ -107,16 +107,16 @@ msgid "Import CSV Logs"
 msgstr "Registres d'importació CSV"
 
 msgctxt "model:ir.action,name:act_import_csv_payment_from_sale"
-msgid "Import Statements from CSV File"
-msgstr "Importa extractes des de arxiu CSV"
+msgid "Import Sale Statements from CSV"
+msgstr "Importa extractes de ventes desde CSV"
 
 msgctxt "model:ir.action,name:act_profile_csv"
 msgid "Sale Payment CSV Profiles"
 msgstr "Perfils de pagaments de venda CSV"
 
 msgctxt "model:ir.ui.menu,name:menu_import_csv_payment_from_sale"
-msgid "Import Statements from CSV File"
-msgstr "Importa extractes des de arxiu CSV"
+msgid "Import Sale Statements from CSV"
+msgstr "Importa extractes de venta des de CSV"
 
 msgctxt "model:ir.ui.menu,name:menu_profile_csv"
 msgid "Sale Payment CSV Profiles"
