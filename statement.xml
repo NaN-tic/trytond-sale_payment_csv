@@ -19,7 +19,7 @@ copyright notices and license terms. -->
         </record>
 
         <record model="ir.action.wizard" id="act_import_csv_payment_from_sale">
-            <field name="name">Import Statements from CSV File</field>
+            <field name="name">Import Sale Statements from CSV</field>
             <field name="wiz_name">import.csv.payment.from.sale</field>
         </record>
 
