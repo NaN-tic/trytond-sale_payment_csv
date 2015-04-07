@@ -25,8 +25,8 @@ Funcionamiento
 Para importar extractos de ventas en estado confirmado hay que:
   * Crear un extracto y dejarlo en estado borrador a través del menú
     Contabilidad > Extractos > Todos los Extractos.
-  * Ejecutar el asistente que se encuentra en el menú Ventas > Importar
-    extractos desde archivo CSV.
+  * Ejecutar el asistente que se encuentra en el menú Contabilidad > Extractos > Importar
+    extractos de ventas desde CSV.
 
 Una vez realizada la importación de un archivo CSV abrir el extracto y
 comprovar que se han importado correctamente todas las líneas del fichero
