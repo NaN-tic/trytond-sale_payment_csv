@@ -8,4 +8,6 @@ copyright notices and license terms. -->
     <field name="import_file"/>
     <label name="attach"/>
     <field name="attach"/>
+    <label name="profile_domain"/>
+    <field name="profile_domain"/>
 </form>

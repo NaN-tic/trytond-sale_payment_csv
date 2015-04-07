@@ -4,6 +4,7 @@ from datetime import datetime
 from decimal import Decimal
 from trytond.model import ModelView, fields
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
 from trytond.wizard import Button, StateTransition, StateView, Wizard
 
 __all__ = ['PaymentFromSaleImportCSVStart', 'PaymentFromSaleImportCSV']
@@ -13,10 +14,34 @@ __metaclass__ = PoolMeta
 class PaymentFromSaleImportCSVStart(ModelView):
     'Payment From Sale Import CSV Start'
     __name__ = 'import.csv.payment.from.sale.start'
-    profile = fields.Many2One('profile.csv', 'Profile CSV', required=True)
+    profile_domain = fields.Function(fields.One2Many('profile.csv', None,
+        'Profile Domain', states={
+            'invisible': True
+            }),
+        'on_change_with_profile_domain')
+    profile = fields.Many2One('profile.csv', 'Profile CSV', required=True,
+        domain=[
+            ('id', 'in', Eval('profile_domain')),
+            ]
+        )
     import_file = fields.Binary('Import File', required=True)
     attach = fields.Boolean('Attach File',
         help='Attach CSV file after import.')
+
+    @fields.depends('attach')
+    def on_change_with_profile_domain(self, name=None):
+        pool = Pool()
+        Model = pool.get('ir.model')
+        Profile = pool.get('profile.csv')
+
+        model, = Model.search([
+                ('model', '=', 'account.statement.line')
+                ])
+        profiles = Profile.search([
+                ('model', '=', model.id),
+                ])
+
+        return [p.id for p in profiles]
 
     @classmethod
     def default_profile(cls):
