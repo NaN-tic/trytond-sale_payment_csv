@@ -11,10 +11,6 @@ msgstr ""
 "Error: %s"
 
 msgctxt "error:import.csv.payment.from.sale:"
-msgid "No sales found for this csv file."
-msgstr "No s'han trobat vendes en aquest arxiu csv."
-
-msgctxt "error:import.csv.payment.from.sale:"
 msgid ""
 "No statement journal configured for %s account journal. Please configure "
 "one."
@@ -75,6 +71,10 @@ msgstr "Diari d'extracte"
 msgctxt "field:profile.csv,sale_domain:"
 msgid "Sale Domain Searcher"
 msgstr "Domini de cerca de vendes"
+
+msgctxt "field:profile.csv,write_off_journal:"
+msgid "Write Off Statement Journal"
+msgstr "Diari extractr de desajust"
 
 msgctxt "help:import.csv.payment.from.sale.start,attach:"
 msgid "Attach CSV file after import."
