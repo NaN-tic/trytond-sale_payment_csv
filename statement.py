@@ -140,6 +140,7 @@ class PaymentFromSaleImportCSV(Wizard):
                 statement_line_domain.append(
                     (column.field.name, '=', values[column.field.name])
                     )
+
             statements = StatementLine.search(statement_line_domain)
             if statements:
                 log_value['comment'] = ('Statement line %s skipped. Already '
@@ -197,8 +198,8 @@ class PaymentFromSaleImportCSV(Wizard):
             if 'date' not in values:
                 values['date'] = Date.today()
 
-            log_value['comment'] = ('Statement line %s added.' %
-                values['description'])
+            log_value['comment'] = ('Statement line of party %s and sale %s '
+                'added.' % (sale.party.name, sale.reference))
             log_value['status'] = 'done'
             log_values.append(log_value)
 
