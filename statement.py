@@ -91,7 +91,9 @@ class PaymentFromSaleImportCSV(Wizard):
                         "values['amount'] * Decimal(1.01)), "
                     "('state', 'not in', ['cancel', 'done'])]\n\n"
                     "[1] http://trytond.readthedocs.org/en/latest/topics/"
-                    "domain.html."
+                    "domain.html.",
+                'sale_domain_searcher_field_empty_error':
+                    'Sale Domain Searcher field can not be empty.',
                 })
 
     def transition_import_file(self):
@@ -104,6 +106,9 @@ class PaymentFromSaleImportCSV(Wizard):
         ImportCSVLog = pool.get('import.csv.log')
 
         profile = self.start.profile
+        if not profile.sale_domain:
+            self.raise_user_error('sale_domain_searcher_field_empty_error')
+
         import_file = self.start.import_file
         has_header = profile.header
         attach = self.start.attach
