@@ -3,13 +3,6 @@
 copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="res.group" id="group_import_csv">
-            <field name="name">Import CSV</field>
-        </record>
-        <record model="res.user-res.group" id="user_admin_group_import_csv">
-            <field name="user" ref="res.user_admin"/>
-            <field name="group" ref="group_import_csv"/>
-        </record>
 
         <!-- import.csv.payment.from.sale.start -->
         <record model="ir.ui.view" id="import_csv_payment_from_sale_start_form_view">
@@ -22,6 +15,11 @@ copyright notices and license terms. -->
             <field name="name">Import Sale Statements from CSV</field>
             <field name="wiz_name">import.csv.payment.from.sale</field>
         </record>
+        <record model="ir.action-res.group"
+                id="act_import_csv_payment_from_sale-group_import_csv_user">
+            <field name="action" ref="act_import_csv_payment_from_sale"/>
+            <field name="group" ref="import_csv.group_import_csv_user"/>
+        </record>
 
         <menuitem
             parent="account_statement.menu_statements"
@@ -29,7 +27,17 @@ copyright notices and license terms. -->
             id="menu_import_csv_payment_from_sale"/>
         <record model="ir.ui.menu-res.group" id="menu_import_csv_group">
             <field name="menu" ref="menu_import_csv_payment_from_sale"/>
-            <field name="group" ref="group_import_csv"/>
+            <field name="group" ref="import_csv.group_import_csv_user"/>
+        </record>
+
+        <menuitem
+            parent="account_statement.menu_statements"
+            action="import_csv.act_import_csv_logs"
+            id="menu_import_sale_payment_log_csv"
+            sequence="50"/>
+        <record model="ir.ui.menu-res.group" id="menu_import_csv_group">
+            <field name="menu" ref="menu_import_csv_payment_from_sale"/>
+            <field name="group" ref="import_csv.group_import_csv_user"/>
         </record>
 
     </data>
