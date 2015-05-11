@@ -35,8 +35,8 @@ copyright notices and license terms. -->
             action="import_csv.act_import_csv_logs"
             id="menu_import_sale_payment_log_csv"
             sequence="50"/>
-        <record model="ir.ui.menu-res.group" id="menu_import_csv_group">
-            <field name="menu" ref="menu_import_csv_payment_from_sale"/>
+        <record model="ir.ui.menu-res.group" id="menu_import_sale_payment_log_group">
+            <field name="menu" ref="menu_import_sale_payment_log_csv"/>
             <field name="group" ref="import_csv.group_import_csv_user"/>
         </record>
 
