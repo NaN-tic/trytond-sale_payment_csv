@@ -27,6 +27,10 @@ msgstr ""
 "el format de l'arxiu CSV."
 
 msgctxt "error:import.csv.payment.from.sale:"
+msgid "Sale Domain Searcher field can not be empty."
+msgstr "El camp del domini de cerca de vendes no pot quedar buit."
+
+msgctxt "error:import.csv.payment.from.sale:"
 msgid "There isn't any statement in draft state. Please open one."
 msgstr "No hi ha cap extracte en estat esborrany. Si us plau obriu un."
 
@@ -63,6 +67,10 @@ msgstr "Importa arxiu"
 msgctxt "field:import.csv.payment.from.sale.start,profile:"
 msgid "Profile CSV"
 msgstr "Perfil CSV"
+
+msgctxt "field:import.csv.payment.from.sale.start,profile_domain:"
+msgid "Profile Domain"
+msgstr "Domini del perfil"
 
 msgctxt "field:profile.csv,journal:"
 msgid "Account Statement Journal"
@@ -118,11 +126,15 @@ msgctxt "model:ir.ui.menu,name:menu_import_csv_payment_from_sale"
 msgid "Import Sale Statements from CSV"
 msgstr "Importa extractes de venta des de CSV"
 
+msgctxt "model:ir.ui.menu,name:menu_import_sale_payment_log_csv"
+msgid "Import CSV Logs"
+msgstr "Registres d'importació CSV"
+
 msgctxt "model:ir.ui.menu,name:menu_profile_csv"
 msgid "Sale Payment CSV Profiles"
 msgstr "Perfils de pagaments de venda CSV"
 
-msgctxt "model:res.group,name:group_import_csv"
+msgctxt "model:res.group,name:"
 msgid "Import CSV"
 msgstr "Importar CSV"
 
