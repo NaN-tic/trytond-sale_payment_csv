@@ -353,6 +353,14 @@ class PaymentFromSaleImportCSV(Wizard):
 
         for log_value in log_values:
             log_value['origin'] = 'account.statement,%s' % statement.id
-        ImportCSVLog.create(log_values)
+        ImportCSVLog.create([{
+                'date_time': datetime.now(),
+                'origin': 'account.statement,%s' % statement.id,
+                'comment': '%s %s' % (statement.name, statement.date),
+                'status': 'done',
+                'children': [
+                    ('create', log_values),
+                    ],
+                }])
 
         return 'end'
