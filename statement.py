@@ -309,7 +309,14 @@ class PaymentFromSaleImportCSV(Wizard):
                 ('date', 'DESC'),
                 ], limit=1)
         if not statements:
-            self.raise_user_error('not_draft_statement_found')
+            statements = Statement.search([
+                    ('journal', '=', profile.journal),
+                    ], order=[
+                    ('date', 'DESC'),
+                    ], limit=1)
+            if not statements:
+                self.raise_user_error('not_draft_statement_found')
+            statements = Statement.copy(statements)
         statement, = statements
 
         for values in vlist:
@@ -323,9 +330,16 @@ class PaymentFromSaleImportCSV(Wizard):
                     ('date', 'DESC'),
                     ], limit=1)
             if not write_off_statements:
-                self.raise_user_error('not_draft_statement_found')
-            write_off_statement, = write_off_statements
+                write_off_statements = Statement.search([
+                        ('journal', '=', profile.write_off_journal),
+                        ], order=[
+                        ('date', 'DESC'),
+                        ], limit=1)
+                if not write_off_statements:
+                    self.raise_user_error('not_draft_statement_found')
+                write_off_statements = Statement.copy(write_off_statements)
 
+            write_off_statement, = write_off_statements
             write_off_vlist = []
             for values in vlist:
                 if not values['write_off']:
