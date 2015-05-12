@@ -22,7 +22,7 @@ class PaymentFromSaleImportCSVStart(ModelView):
     profile = fields.Many2One('profile.csv', 'Profile CSV', required=True,
         domain=[
             ('id', 'in', Eval('profile_domain')),
-            ]
+            ], depends=['profile_domain']
         )
     import_file = fields.Binary('Import File', required=True)
     attach = fields.Boolean('Attach File',
