@@ -68,12 +68,12 @@ class PaymentFromSaleImportCSV(Wizard):
     def __setup__(cls):
         super(PaymentFromSaleImportCSV, cls).__setup__()
         cls._error_messages.update({
+                'sale_domain_searcher_field_empty_error':
+                    'Sale Domain Searcher field can not be empty.',
                 'csv_format_error': 'Please, check that the Statement CSV '
                     'configuration matches with the format of the CSV file.',
-                'not_statement_journal': 'No statement journal configured for '
-                    '%s account journal. Please configure one.',
-                'not_draft_statement_found': 'There isn\'t any statement in '
-                    'draft state. Please open one.',
+                'statement_already_exists_error': 'Statement line %s skipped. '
+                    'Already exists.',
                 'sale_domain_searcher_error': 'Error in field Sale Domain '
                     'Searcher.\nError raised: %s',
                 'sale_domain_searcher_help': "Tryton's domain [1] for "
@@ -83,17 +83,53 @@ class PaymentFromSaleImportCSV(Wizard):
                     "of the csv profile.\n"
                     " * row: List with the values of the csv file. This "
                     "variable can not process other values than Char type.\n"
-                    "As a example:\n["
-                    "('reference', '=', row[4]), "
-                    "('total_amount_cache', '>', "
-                        "values['amount'] * Decimal(0.99)), "
-                    "('total_amount_cache', '<', "
-                        "values['amount'] * Decimal(1.01)), "
-                    "('state', 'not in', ['cancel', 'done'])]\n\n"
+                    "As a example:\n[('reference', '=', row[4])]\n\n"
                     "[1] http://trytond.readthedocs.org/en/latest/topics/"
                     "domain.html.",
-                'sale_domain_searcher_field_empty_error':
-                    'Sale Domain Searcher field can not be empty.',
+                'sale_state_filter_error': 'Error in field Sale State Filter .'
+                    '\nError raised: %s',
+                'sale_state_filter_help': "Tryton's domain [1] for searching "
+                    "sales which match with statement lines. You can use these"
+                    " variables:\n"
+                    " * values: Dictionary with values mapped on the columns "
+                    "of the csv profile.\n"
+                    " * row: List with the values of the csv file. This "
+                    "variable can not process other values than Char type.\n"
+                    "For instance:\n"
+                    "[('state', 'in', "
+                    "('quotation', 'confirmed', 'processing')), "
+                    "('invoice_state', 'in', "
+                    "('draft', 'validated', 'posted', 'waiting'))]"
+                    "[1] http://trytond.readthedocs.org/en/latest/topics/"
+                    "domain.html.",
+                'state_match_error': 'Sale %s skipped. '
+                    'Sale state %s does not match.',
+                'sale_amount_filter_error': 'Error in field Sale '
+                    'Amount Filter.\nError raised: %s',
+                'sale_amount_filter_help': "Tryton's domain [1] for searching "
+                    "sales which match with statement lines. You can use these"
+                    " variables:\n"
+                    " * values: Dictionary with values mapped on the columns "
+                    "of the csv profile.\n"
+                    " * row: List with the values of the csv file. This "
+                    "variable can not process other values than Char type.\n"
+                    "For instance:\n"
+                    "[('total_amount_cache', '>', "
+                    "values['amount'] * Decimal(0.99)), "
+                    "('total_amount_cache', '<', "
+                    "values['amount'] * Decimal(1.01))]\n"
+                    "[1] http://trytond.readthedocs.org/en/latest/topics/"
+                    "domain.html.",
+                'sale_amount_match_error':
+                    'Sale %s does not match its quantity.',
+                'sale_not_found_error': 'Sale %s skipped. Not found.',
+                'sale_too_match_error': 'Sale %s skipped. More than one sale '
+                    'found matching the different criteria. Please, be more '
+                    'precise.',
+                'not_statement_journal': 'No statement journal configured for '
+                    '%s account journal. Please configure one.',
+                'not_draft_statement_found': 'There isn\'t any statement in '
+                    'draft state. Please open one.',
                 })
 
     def transition_import_file(self):
@@ -143,8 +179,10 @@ class PaymentFromSaleImportCSV(Wizard):
                 log_value = {
                     'date_time': datetime.now(),
                     }
-                log_value['comment'] = ('Statement line %s skipped. Already '
-                    'exists.' % statements[0].description)
+                log_value['comment'] = self.raise_user_error(
+                    'statement_already_exists_error',
+                    error_args=(statements[0].description,),
+                    raise_exception=False)
                 log_value['status'] = 'skipped'
                 log_values.append(log_value)
                 continue
@@ -206,8 +244,10 @@ class PaymentFromSaleImportCSV(Wizard):
                 log_value = {
                     'date_time': datetime.now(),
                     }
-                log_value['comment'] = ('Sale %s skipped. Not found.' %
-                    sale_domain)
+                log_value['comment'] = self.raise_user_error(
+                    'sale_not_found_error',
+                    error_args=(sale_domain,),
+                    raise_exception=False)
                 log_value['status'] = 'skipped'
                 log_values.append(log_value)
                 continue
@@ -215,12 +255,10 @@ class PaymentFromSaleImportCSV(Wizard):
                 log_value = {
                     'date_time': datetime.now(),
                     }
-                log_value['comment'] = ('Sale %s skipped. Found more than '
-                    'once: %s.' % (
-                        sale_domain,
-                        ' '.join(s.reference for s in sales)
-                        )
-                    )
+                log_value['comment'] = self.raise_user_error(
+                    'sale_too_match_error',
+                    error_args=(sale_domain,),
+                    raise_exception=False)
                 log_value['status'] = 'skipped'
                 log_values.append(log_value)
                 continue
