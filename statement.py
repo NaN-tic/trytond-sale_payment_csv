@@ -122,9 +122,6 @@ class PaymentFromSaleImportCSV(Wizard):
         sales_found = []
         log_values = []
         for row in list(data):
-            log_value = {
-                'date_time': datetime.now(),
-                }
             values = {}
             statement_line_domain = []
 
@@ -143,6 +140,9 @@ class PaymentFromSaleImportCSV(Wizard):
 
             statements = StatementLine.search(statement_line_domain)
             if statements:
+                log_value = {
+                    'date_time': datetime.now(),
+                    }
                 log_value['comment'] = ('Statement line %s skipped. Already '
                     'exists.' % statements[0].description)
                 log_value['status'] = 'skipped'
@@ -157,12 +157,18 @@ class PaymentFromSaleImportCSV(Wizard):
                     error_description='sale_domain_searcher_help')
             sales = Sale.search(sale_domain)
             if not sales:
+                log_value = {
+                    'date_time': datetime.now(),
+                    }
                 log_value['comment'] = ('Sale %s skipped. Not found.' %
                     sale_domain)
                 log_value['status'] = 'skipped'
                 log_values.append(log_value)
                 continue
             elif len(sales) > 1:
+                log_value = {
+                    'date_time': datetime.now(),
+                    }
                 log_value['comment'] = ('Sale %s skipped. Found more than '
                     'once: %s.' % (
                         sale_domain,
@@ -180,6 +186,9 @@ class PaymentFromSaleImportCSV(Wizard):
                 values['write_off'] = (sale.total_amount_cache -
                     values['amount'])
 
+            log_value = {
+                'date_time': datetime.now(),
+                }
             log_value['comment'] = ('Sale %s found.' % sale.reference)
             log_value['status'] = 'done'
             log_values.append(log_value)
@@ -198,6 +207,9 @@ class PaymentFromSaleImportCSV(Wizard):
             if 'date' not in values:
                 values['date'] = Date.today()
 
+            log_value = {
+                'date_time': datetime.now(),
+                }
             log_value['comment'] = ('Statement line of party %s and sale %s '
                 'added.' % (sale.party.name, sale.reference))
             log_value['status'] = 'done'
