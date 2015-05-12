@@ -25,6 +25,10 @@ copyright notices and license terms. -->
     <field name="columns" colspan="4"/>
     <label name="sale_domain"/>
     <field name="sale_domain" colspan="3"/>
+    <label name="sale_state"/>
+    <field name="sale_state" colspan="3"/>
+    <label name="sale_amount"/>
+    <field name="sale_amount" colspan="3"/>
     <label name="journal"/>
     <field name="journal"/>
     <label name="write_off_journal"/>

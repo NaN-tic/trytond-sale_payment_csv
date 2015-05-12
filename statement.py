@@ -156,7 +156,53 @@ class PaymentFromSaleImportCSV(Wizard):
                     error_args=(e,),
                     error_description='sale_domain_searcher_help')
             sales = Sale.search(sale_domain)
-            if not sales:
+
+            if sales:
+                if profile.sale_state:
+                    try:
+                        state_domain = eval(profile.sale_state, globals(),
+                            locals())
+                    except (NameError, TypeError) as e:
+                        self.raise_user_error('sale_state_filter_error',
+                            error_args=(e,),
+                            error_description='sale_state_filter_help')
+                    state_domain.extend([('id', 'in', [s.id for s in sales])])
+                    sales = Sale.search(state_domain)
+                    if not sales:
+                        log_value = {
+                            'date_time': datetime.now(),
+                            }
+                        log_value['comment'] = self.raise_user_error(
+                            'state_match_error',
+                            error_args=(sale_domain, state_domain),
+                            raise_exception=False)
+                        log_value['status'] = 'skipped'
+                        log_values.append(log_value)
+                        continue
+
+                if profile.sale_amount:
+                    try:
+                        amount_filter = eval(profile.sale_amount, globals(),
+                            locals())
+                    except (NameError, TypeError) as e:
+                        self.raise_user_error('sale_amount_filter_error',
+                            error_args=(e,),
+                            error_description='sale_amount_filter_help')
+                    amount_filter.extend([('id', 'in', [s.id for s in sales])])
+                    sales = Sale.search(amount_filter)
+                    if not sales:
+                        log_value = {
+                            'date_time': datetime.now(),
+                            }
+                        log_value['comment'] = self.raise_user_error(
+                            'sale_amount_match_error',
+                            error_args=(sale_domain, state_domain),
+                            raise_exception=False)
+                        log_value['status'] = 'skipped'
+                        log_values.append(log_value)
+                        continue
+
+            else:
                 log_value = {
                     'date_time': datetime.now(),
                     }
@@ -165,7 +211,7 @@ class PaymentFromSaleImportCSV(Wizard):
                 log_value['status'] = 'skipped'
                 log_values.append(log_value)
                 continue
-            elif len(sales) > 1:
+            if len(sales) > 1:
                 log_value = {
                     'date_time': datetime.now(),
                     }
