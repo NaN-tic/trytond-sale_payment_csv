@@ -43,8 +43,8 @@ msgstr ""
 "el format de l'arxiu CSV."
 
 msgctxt "error:import.csv.payment.from.sale:"
-msgid "Sale %s does not match its quantity."
-msgstr "La venda %s no concorda en quantitat."
+msgid "Sale %s does not match its quantity: %s."
+msgstr "La venda %s no concorda amb quantitat: %s."
 
 msgctxt "error:import.csv.payment.from.sale:"
 msgid ""
