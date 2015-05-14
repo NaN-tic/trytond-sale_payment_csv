@@ -306,17 +306,26 @@ class PaymentFromSaleImportCSV(Wizard):
                 ('journal', '=', profile.journal),
                 ('state', '=', 'draft'),
                 ], order=[
-                ('date', 'DESC'),
+                ('create_date', 'DESC'),
                 ], limit=1)
         if not statements:
             statements = Statement.search([
                     ('journal', '=', profile.journal),
+                    ('state', '!=', 'cancel'),
                     ], order=[
-                    ('date', 'DESC'),
+                    ('create_date', 'DESC'),
                     ], limit=1)
-            if not statements:
-                self.raise_user_error('not_draft_statement_found')
-            statements = Statement.copy(statements)
+            if statements:
+                start_balance = statements[0].end_balance
+            else:
+                start_balance = Decimal('0.0')
+            statements = Statement.create([{
+                        'name': '%s %s' % (profile.journal.name,
+                            datetime.now()),
+                        'journal': profile.journal,
+                        'start_balance': start_balance,
+                        'end_balance': Decimal('0.0'),
+                        }])
         statement, = statements
 
         for values in vlist:
@@ -327,18 +336,26 @@ class PaymentFromSaleImportCSV(Wizard):
                     ('journal', '=', profile.write_off_journal),
                     ('state', '=', 'draft'),
                     ], order=[
-                    ('date', 'DESC'),
+                    ('create_date', 'DESC'),
                     ], limit=1)
             if not write_off_statements:
                 write_off_statements = Statement.search([
                         ('journal', '=', profile.write_off_journal),
+                        ('state', '!=', 'cancel'),
                         ], order=[
-                        ('date', 'DESC'),
+                        ('create_date', 'DESC'),
                         ], limit=1)
-                if not write_off_statements:
-                    self.raise_user_error('not_draft_statement_found')
-                write_off_statements = Statement.copy(write_off_statements)
-
+                if write_off_statements:
+                    start_balance = write_off_statements[0].end_balance
+                else:
+                    start_balance = Decimal('0.0')
+                write_off_statements = Statement.create([{
+                            'name': '%s %s' % (profile.write_off_journal.name,
+                                datetime.now()),
+                            'journal': profile.write_off_journal,
+                            'start_balance': start_balance,
+                            'end_balance': Decimal('0.0'),
+                            }])
             write_off_statement, = write_off_statements
             write_off_vlist = []
             for values in vlist:
