@@ -121,15 +121,13 @@ class PaymentFromSaleImportCSV(Wizard):
                     "[1] http://trytond.readthedocs.org/en/latest/topics/"
                     "domain.html.",
                 'sale_amount_match_error':
-                    'Sale %s does not match its quantity.',
+                    'Sale %s does not match its quantity: %s.',
                 'sale_not_found_error': 'Sale %s skipped. Not found.',
                 'sale_too_match_error': 'Sale %s skipped. More than one sale '
                     'found matching the different criteria. Please, be more '
                     'precise.',
-                'not_statement_journal': 'No statement journal configured for '
-                    '%s account journal. Please configure one.',
-                'not_draft_statement_found': 'There isn\'t any statement in '
-                    'draft state. Please open one.',
+                'party_without_account_receivable': 'Party has not any '
+                    'account receivable. Please configure one.',
                 })
 
     def transition_import_file(self):
@@ -190,9 +188,12 @@ class PaymentFromSaleImportCSV(Wizard):
             try:
                 sale_domain = eval(profile.sale_domain, globals(), locals())
             except (NameError, TypeError) as e:
+                error_description = self.raise_user_error(
+                    'sale_domain_searcher_help',
+                    raise_exception=True)
                 self.raise_user_error('sale_domain_searcher_error',
                     error_args=(e,),
-                    error_description='sale_domain_searcher_help')
+                    error_description=error_description)
             sales = Sale.search(sale_domain)
 
             if sales:
@@ -201,9 +202,12 @@ class PaymentFromSaleImportCSV(Wizard):
                         state_domain = eval(profile.sale_state, globals(),
                             locals())
                     except (NameError, TypeError) as e:
+                        error_description = self.raise_user_error(
+                            'sale_state_filter_help',
+                            raise_exception=True)
                         self.raise_user_error('sale_state_filter_error',
                             error_args=(e,),
-                            error_description='sale_state_filter_help')
+                            error_description=error_description)
                     state_domain.extend([('id', 'in', [s.id for s in sales])])
                     sales = Sale.search(state_domain)
                     if not sales:
@@ -223,9 +227,12 @@ class PaymentFromSaleImportCSV(Wizard):
                         amount_filter = eval(profile.sale_amount, globals(),
                             locals())
                     except (NameError, TypeError) as e:
+                        error_description = self.raise_user_error(
+                            'sale_amount_filter_help',
+                            raise_exception=True)
                         self.raise_user_error('sale_amount_filter_error',
                             error_args=(e,),
-                            error_description='sale_amount_filter_help')
+                            error_description=error_description)
                     amount_filter.extend([('id', 'in', [s.id for s in sales])])
                     sales = Sale.search(amount_filter)
                     if not sales:
@@ -234,7 +241,7 @@ class PaymentFromSaleImportCSV(Wizard):
                             }
                         log_value['comment'] = self.raise_user_error(
                             'sale_amount_match_error',
-                            error_args=(sale_domain, state_domain),
+                            error_args=(sale_domain, amount_filter),
                             raise_exception=False)
                         log_value['status'] = 'skipped'
                         log_values.append(log_value)
