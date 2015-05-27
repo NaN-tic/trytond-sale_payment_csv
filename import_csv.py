@@ -3,7 +3,7 @@
 from trytond.model import fields
 from trytond.pool import PoolMeta
 
-__all__ = ['ProfileCSV']
+__all__ = ['ProfileCSV', 'ImportCSVLog']
 __metaclass__ = PoolMeta
 
 
@@ -46,3 +46,12 @@ class ProfileCSV:
             "[('total_amount_cache', '>', values['amount'] * Decimal(0.99)), "
             "('total_amount_cache', '<', values['amount'] * Decimal(1.01))]\n"
             "[1] http://trytond.readthedocs.org/en/latest/topics/domain.html.")
+
+
+class ImportCSVLog:
+    __name__ = 'import.csv.log'
+
+    @classmethod
+    def _get_origin(cls):
+        return (super(ImportCSVLog, cls)._get_origin() +
+            ['account.statement'])

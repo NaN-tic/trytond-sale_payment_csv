@@ -7,6 +7,7 @@ from .statement import *
 def register():
     Pool.register(
         ProfileCSV,
+        ImportCSVLog,
         PaymentFromSaleImportCSVStart,
         module='sale_payment_csv', type_='model')
     Pool.register(
