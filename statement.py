@@ -162,12 +162,12 @@ class PaymentFromSaleImportCSV(Wizard):
             for column in profile.columns:
                 cells = column.column.split(',')
                 try:
-                    value = ','.join(row[int(c)] for c in cells)
+                    vals = [row[int(c)] for c in cells]
                 except IndexError:
                     self.raise_user_error('csv_format_error')
                 ttype = column.ttype
                 get_value = getattr(column, 'get_%s' % ttype)
-                values[column.field.name] = get_value(value)
+                values[column.field.name] = get_value(vals)
                 statement_line_domain.append(
                     (column.field.name, '=', values[column.field.name])
                     )
