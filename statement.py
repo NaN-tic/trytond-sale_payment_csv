@@ -162,27 +162,89 @@ class PaymentFromSaleImportCSV(Wizard):
             for column in profile.columns:
                 cells = column.column.split(',')
                 try:
-                    vals = [row[int(c)] for c in cells]
+                    vals = [row[int(c)] for c in cells if c]
                 except IndexError:
                     self.raise_user_error('csv_format_error')
-                ttype = column.ttype
-                get_value = getattr(column, 'get_%s' % ttype)
-                values[column.field.name] = get_value(vals)
-                statement_line_domain.append(
-                    (column.field.name, '=', values[column.field.name])
-                    )
 
-            statements = StatementLine.search(statement_line_domain)
-            if statements:
-                log_value = {
-                    'date_time': datetime.now(),
-                    }
-                log_value['comment'] = self.raise_user_error(
-                    'statement_already_exists_error',
-                    error_args=(statements[0].description,),
-                    raise_exception=False)
-                log_value['status'] = 'skipped'
-                log_values.append(log_value)
+                value = column.get_value(vals)
+
+                if value is None and column.field_required():
+                    log_value = {
+                        'date_time': datetime.now(),
+                        }
+                    log_value['origin'] = 'profile.csv,%s' % profile.id
+                    log_value['comment'] = self.raise_user_error(
+                        'required_field_null_error',
+                        error_args=(column.field.field_description, row),
+                        raise_exception=False)
+                    log_value['status'] = 'skipped'
+                    log_values.append(log_value)
+                    break
+                elif (profile.match_expression
+                        and eval(profile.match_expression)):
+                    log_value = {
+                        'date_time': datetime.now(),
+                        }
+                    log_value['origin'] = 'profile.csv,%s' % profile.id
+                    log_value['comment'] = self.raise_user_error(
+                        'skip_row_filter_error',
+                        error_args=(row),
+                        raise_exception=False)
+                    log_value['status'] = 'skipped'
+                    log_values.append(log_value)
+                    break
+                values[column.field.name] = value
+
+                if column.field.name and column.add_to_domain:
+                    if column.ttype in ('one2many', 'many2many'):
+                        operator = 'in'
+                        if value[0][0] == 'add':
+                            value = value[0][1]
+                        elif value[0][0] == 'create':
+                            Relation = pool.get(column.field.relation)
+                            val = []
+                            for record in value[0][1]:
+                                dom = []
+                                for field in record:
+                                    dom.append((field, '=', record[field]))
+                                val += [r.id for r in Relation.search(dom)]
+                            value = val
+                        else:
+                            self.raise_user_error('not_implemented_error',
+                                raise_exception=True)
+                    else:
+                        operator = '='
+                    statement_line_domain.append((
+                            column.field.name,
+                            operator,
+                            value
+                            ))
+            else:
+                if statement_line_domain:
+                    statements = StatementLine.search(statement_line_domain)
+                    if statements:
+                        log_value = {
+                            'date_time': datetime.now(),
+                            }
+                        log_value['comment'] = self.raise_user_error(
+                            'statement_already_exists_error',
+                            error_args=(statements[0].description,),
+                            raise_exception=False)
+                        log_value['status'] = 'skipped'
+                        log_values.append(log_value)
+                        continue
+
+                skip = len(vlist) != 0
+                for vals in vlist:
+                    skip = True
+                    for field in values:
+                        skip &= vals[field] == values[field]
+                    if skip:
+                        break
+                if skip:
+                    continue
+
+            if not values:
                 continue
 
             try:
