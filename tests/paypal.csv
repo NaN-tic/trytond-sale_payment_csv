@@ -2,4 +2,5 @@ vencimiento, Hora, Zona horaria, Nombre, Tipo, Estado, Divisa, Bruto, Tarifa, Ne
 25/02/2015,22:59:23,CET,Dunder Mifflin,Pago de carro de la compra recibido,Completado,EUR,"10,00",,,dunder@example.com,,1WN051,Fuera de EE. UU.: Verificado,Fuera de EE. UU.,Shopping Cart,,0,,,,,,,,,,,,,,1,,,,,,,,,,,
 25/02/2015,22:59:23,CET,Dunder Mifflin,Pago de carro de la compra recibido,Completado,EUR,"19,99",,,dunder@example.com,,1WN052,Fuera de EE. UU.: Verificado,Fuera de EE. UU.,Shopping Cart,,0,,,,,,,,,,,,,,2,,,,,,,,,,,
 25/02/2015,22:59:23,CET,Dunder Mifflin,Pago de carro de la compra recibido,Completado,EUR,"19,99",,,dunder@example.com,,1WN053,Fuera de EE. UU.: Verificado,Fuera de EE. UU.,Shopping Cart,,0,,,,,,,,,,,,,,3,,,,,,,,,,,
+25/02/2015,22:59:23,CET,Dunder Mifflin,Pago de carro de la compra recibido,Incompleto,EUR,"40,00",,,dunder@example.com,,1WN053,Fuera de EE. UU.: Verificado,Fuera de EE. UU.,Shopping Cart,,0,,,,,,,,,,,,,,4,,,,,,,,,,,
 25/02/2015,22:59:23,CET,Dunder Mifflin,Pago de carro de la compra recibido,Completado,EUR,"40,00",,,dunder@example.com,,1WN054,Fuera de EE. UU.: Verificado,Fuera de EE. UU.,Shopping Cart,,0,,,,,,,,,,,,,,6,,,,,,,,,,,

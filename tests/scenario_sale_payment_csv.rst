@@ -320,7 +320,7 @@ Create account statement csv profile with four lines::
     >>> profile.model = account_statement_line_model
     >>> profile.separator = ','
     >>> profile.quote = '"'
-    >>> profile.match_expression = 'row[5] == "Completado" and row[31] != ""'
+    >>> profile.match_expression = 'row[5] != "Completado" or row[31] == ""'
     >>> profile.active = True
     >>> profile.thousands_separator = 'none'
     >>> profile.decimal_separator = ','
@@ -353,7 +353,7 @@ Create account statement csv profile with four lines::
     >>> profile_column.add_to_domain = True
     >>> profile.save()
 
-Import CSV Paypal file with 4 statements::
+Import CSV Payment Wizard with file of 5 statements::
 
     >>> import_csv_payment = Wizard('import.csv.payment.from.sale')
     >>> import_csv_payment.form.attach = False
