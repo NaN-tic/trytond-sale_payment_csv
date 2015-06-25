@@ -128,6 +128,8 @@ class PaymentFromSaleImportCSV(Wizard):
                     'precise.',
                 'party_without_account_receivable': 'Party has not any '
                     'account receivable. Please configure one.',
+                'match_expression_error': 'Row %s skipped because of matches '
+                    'expression criteria to exclude it.',
                 })
 
     def transition_import_file(self):
@@ -187,7 +189,7 @@ class PaymentFromSaleImportCSV(Wizard):
                         }
                     log_value['origin'] = 'profile.csv,%s' % profile.id
                     log_value['comment'] = self.raise_user_error(
-                        'skip_row_filter_error',
+                        'match_expression_error',
                         error_args=(row),
                         raise_exception=False)
                     log_value['status'] = 'skipped'
