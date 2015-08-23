@@ -35,7 +35,10 @@ copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_import_csv_log_from_statement">
             <field name="name">Import CSV Logs</field>
             <field name="res_model">import.csv.log</field>
-            <field name="domain">[('origin', '=', ('account.statement',Eval('active_id')))]</field>
+            <field name="domain"></field>
+            <field name="domain"
+                eval="[('origin', '=', ('account.statement',Eval('active_id')))]"
+                pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_import_csv_log_from_statement_tree">
             <field name="sequence" eval="10"/>
