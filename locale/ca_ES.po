@@ -127,7 +127,7 @@ msgstr "Adjunta arxiu"
 
 msgctxt "field:import.csv.payment.from.sale.start,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:import.csv.payment.from.sale.start,import_file:"
 msgid "Import File"
@@ -182,7 +182,6 @@ msgstr ""
 "\n"
 "[1] http://trytond.readthedocs.org/en/latest/topics/domain.html."
 
-#, fuzzy
 msgctxt "help:profile.csv,sale_domain:"
 msgid ""
 "Tryton's domain [1] for searching sales which match with statement lines. You can use these variables:\n"

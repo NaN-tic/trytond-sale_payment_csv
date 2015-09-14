@@ -126,7 +126,7 @@ msgstr "Adjunta archivo"
 
 msgctxt "field:import.csv.payment.from.sale.start,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:import.csv.payment.from.sale.start,import_file:"
 msgid "Import File"
