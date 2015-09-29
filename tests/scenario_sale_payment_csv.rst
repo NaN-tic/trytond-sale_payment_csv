@@ -19,12 +19,12 @@ Create database::
 
 Install sale_payment_csv::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> sale_payment_csv_module, = Module.find([
     ...     ('name', '=', 'sale_payment_csv')
     ...     ])
     >>> Module.install([sale_payment_csv_module.id], config.context)
-    >>> Wizard('ir.module.module.install_upgrade').execute('upgrade')
+    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
 
 Create company::
 
