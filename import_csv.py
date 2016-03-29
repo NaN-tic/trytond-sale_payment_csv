@@ -4,10 +4,10 @@ from trytond.model import fields
 from trytond.pool import PoolMeta
 
 __all__ = ['ProfileCSV', 'ImportCSVLog']
-__metaclass__ = PoolMeta
 
 
 class ProfileCSV:
+    __metaclass__ = PoolMeta
     __name__ = 'profile.csv'
     journal = fields.Many2One('account.statement.journal',
         'Account Statement Journal')
@@ -49,6 +49,7 @@ class ProfileCSV:
 
 
 class ImportCSVLog:
+    __metaclass__ = PoolMeta
     __name__ = 'import.csv.log'
 
     @classmethod

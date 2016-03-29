@@ -3,12 +3,11 @@
 from datetime import datetime
 from decimal import Decimal
 from trytond.model import ModelView, fields
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.wizard import Button, StateTransition, StateView, Wizard
 
 __all__ = ['PaymentFromSaleImportCSVStart', 'PaymentFromSaleImportCSV']
-__metaclass__ = PoolMeta
 
 
 class PaymentFromSaleImportCSVStart(ModelView):
