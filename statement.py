@@ -2,13 +2,20 @@
 # copyright notices and license terms.
 from datetime import datetime
 from decimal import Decimal
-from trytond.model import ModelView, fields
+from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.wizard import Button, StateTransition, StateView, Wizard
+from trytond.transaction import Transaction
 
-__all__ = ['PaymentFromSaleImportCSVStart', 'PaymentFromSaleImportCSV']
+__all__ = ['PaymentFromSaleImportCSVStart', 'PaymentFromSaleImportCSV',
+    'StatementSync']
 __metaclass__ = PoolMeta
+
+
+class StatementSync(ModelSQL):
+    'Synchornization table for Payment From Sale Import CSV'
+    __name__ = 'statement.sync.import.payment'
 
 
 class PaymentFromSaleImportCSVStart(ModelView):
@@ -130,16 +137,27 @@ class PaymentFromSaleImportCSV(Wizard):
                     'account receivable. Please configure one.',
                 'match_expression_error': 'Row %s skipped because of matches '
                     'expression criteria to exclude it.',
+                'table_lock': 'Someone is already importing payments, \
+                    please wait'
                 })
+
+    @staticmethod
+    def lock_statement():
+        return True
 
     def transition_import_file(self):
         pool = Pool()
         Sale = pool.get('sale.sale')
         Statement = pool.get('account.statement')
         StatementLine = pool.get('account.statement.line')
+        StatementSync = pool.get('statement.sync.import.payment')
         Date = pool.get('ir.date')
         Attachment = pool.get('ir.attachment')
         ImportCSVLog = pool.get('import.csv.log')
+
+        #if PaymentFromSaleImportCSV.lock_statement():
+        Transaction().cursor.lock(StatementSync._table)
+        #    self.raise_user_error('table_lock')
 
         profile = self.start.profile
         if not profile.sale_domain:
