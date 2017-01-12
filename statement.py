@@ -137,8 +137,6 @@ class PaymentFromSaleImportCSV(Wizard):
                     'account receivable. Please configure one.',
                 'match_expression_error': 'Row %s skipped because of matches '
                     'expression criteria to exclude it.',
-                'table_lock': 'Someone is already importing payments, \
-                    please wait'
                 })
 
     @staticmethod
@@ -155,9 +153,8 @@ class PaymentFromSaleImportCSV(Wizard):
         Attachment = pool.get('ir.attachment')
         ImportCSVLog = pool.get('import.csv.log')
 
-        #if PaymentFromSaleImportCSV.lock_statement():
-        Transaction().cursor.lock(StatementSync._table)
-        #    self.raise_user_error('table_lock')
+        if self.lock_statement():
+            Transaction().cursor.lock(StatementSync._table)
 
         profile = self.start.profile
         if not profile.sale_domain:
